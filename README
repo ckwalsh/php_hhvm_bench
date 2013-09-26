@@ -1,0 +1,19 @@
+This is an entirely artificial benchmark of Zend PHP and HHVM written and run September 25th around 9:30PM PST. It compares the version of HHVM currently available on GitHub at that time with the php package installed on a stock Ubuntu 13.04 install (PHP 5.4.9-4ubuntu2). The php installation includes the apc and curl extensions, but is otherwise untouched with the stock apache config (with the memory limit disabled).
+
+These benchmarks were originally chosen by http://www.leaseweblabs.com/2013/09/benchmarking-hiphopvm-php-5-3-ubuntu-12-04/ . However, I have repackaged them and slightly altered them for a few reasons:
+
+* HHVM performs best when logic is contained within functions or class methods, as it can perform better optimizations knowing the global state is unchanged by other parts of the code. Each benchmark was modified to be contained in its own Bench# class, to take advantage of this.
+* echo and timing statements were removed, and re-added for consistent output across benchmarks
+* Some tests were much shorter/longer than others, and I adjusted several repetition values to make each test take between 0.9 and 1.5s on my test machine.
+
+HHVM was compiled using the instructions in the github wiki, and run with the following command:
+    ~/dev/hiphop-php/hphp/hhvm/hhvm -m server -p 1667 \
+      -v Eval.JitWarmupRequests=3 \
+      -v Server.SourceRoot=/var/www \
+      1>/dev/null 2>/dev/null
+
+My results can be found in the included RESULTS file. Testing was performed by running "php bench.php" on the command line (command was run a couple times before to warm up the cache).
+
+Do not take these benchmarks to mean HHVM is better or Zend is better. These benchmarks are entirely artificial, and do not represent any sort of real workload for a real php application.
+
+Questions? Feel free to email me at ckwalsh@fb.com
